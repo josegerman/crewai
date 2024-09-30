@@ -29,4 +29,4 @@ class CustomAgents:
             goal=dedent(f"""Take the information from the pdf agent and summarize it nicely."""),
             verbose=True,
             llm=self.OpenAIGPT35,
-        ) 
+        )
