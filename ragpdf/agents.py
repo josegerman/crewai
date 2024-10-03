@@ -11,7 +11,7 @@ class CustomAgents:
 
     def pdf_agent(self):
 
-        pdf_tool = PDFSearchTool("gpt-4-analysis.pdf")
+        pdf_tool = PDFSearchTool("ragpdf\\gpt-4-analysis.pdf")
 
         return Agent(
             role="Senior PDF Analyst",
