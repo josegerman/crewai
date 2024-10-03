@@ -5,11 +5,9 @@
 
 import os
 from dotenv import load_dotenv
+from crewai_tools import PDFSearchTool # <============= must come before other crewai imports
 from crewai import Agent, Task, Crew, Process
 from textwrap import dedent
-from langchain_openai import ChatOpenAI
-#from crewai_tools import PDFSearchTool
-from pdf_tool import crewPdfTool
 
 load_dotenv()
 
@@ -18,10 +16,14 @@ load_dotenv()
 
 var1 = input("What is your question: ")
 
-#pdf_tool = PDFSearchTool("ragpdf\\gpt-4-analysis.pdf")
-tool = crewPdfTool.pdftool()
+# =================================================
+# Tool declaration
+# =================================================
+tool = PDFSearchTool(pdf='ragpdf/gpt-4-analysis.pdf')
 
-
+# =================================================
+# Agents
+# =================================================
 pdf_agent = Agent(
     role="Senior PDF Analyst",
     backstory=dedent(f"""You can find anything in a pdf.  The people need you."""),
@@ -39,6 +41,9 @@ writer_agent = Agent(
     #llm=OpenAIGPT35,
 )
 
+# =================================================
+# Tasks
+# =================================================
 pdf_task = Task(
     description=dedent(
                 f"""
@@ -62,24 +67,21 @@ writer_task = Task(
             agent=writer_agent,
 )
 
+# =================================================
+# Put crew together
+# =================================================
 custom_crew = Crew(
     agents=[pdf_agent, writer_agent],
     tasks=[pdf_task, writer_task],
     process=Process.sequential,
     verbose=True
 )
-
+# =================================================
+# Run crew
+# =================================================
 result = custom_crew.kickoff()
+print("\n\n################################################")
+print("## Here is your custom crew run result:")
+print("################################################\n")
 print(result)
 
-# if __name__ == "__main__":
-#     print("## Welcome to Crew AI Template")
-#     print("-------------------------------")
-#     var1 = input(dedent("""Enter variable 1: """))
-
-    
-
-#     print("\n\n########################")
-#     print("## Here is you custom crew run result:")
-#     print("########################\n")
-#     print(result)
